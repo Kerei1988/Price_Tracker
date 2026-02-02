@@ -1,0 +1,22 @@
+{% extends 'products/base.html'%}
+
+{% block content %}
+
+<h1>История цен: {{ product.name }}</h1>
+<h3>Текущая цена: {% if product.current_price %}
+                        {{ product.current_price }}₽</h3>
+                    {% else %}
+                        <span class="text-muted"> Не известно </span>
+                    {% endif %}
+{% if history %}
+    <ul>
+    {% for record in history %}
+        <li>{{ record.created_at|date:"d.m.Y H:i" }} - {{ record.price }}₽</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет истории цен</p>
+{% endif %}
+
+<a href="{% url 'product_list' %}">Назад</a>
+{% endblock %}

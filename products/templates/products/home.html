@@ -1,0 +1,67 @@
+{% extends 'products/base.html %}
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4">📈 Price Tracker</h1>
+        <p class="lead">Отслеживайте цены на товары и покупайте по лучшей цене!</p>
+        
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Начните отслеживать цены</h5>
+                        <p class="card-text">
+                            Добавляйте товары из магазинов, и мы будем следить за изменением их цен.
+                            Получайте уведомления, когда цена падает!
+                        </p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Войти в систему</a>
+                            <a href="/admin/" class="btn btn-outline-secondary">Админка</a>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Тестовый пользователь: testuser / test123
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5">
+            <h4>Как это работает?</h4>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="fs-1">1️⃣</div>
+                        <h5>Добавьте товар</h5>
+                        <p>Скопируйте ссылку на товар из магазина</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="fs-1">2️⃣</div>
+                        <h5>Мы отслеживаем</h5>
+                        <p>Наш парсер ежедневно проверяет цены</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="fs-1">3️⃣</div>
+                        <h5>Получайте уведомления</h5>
+                        <p>Когда цена падает до желаемой</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="fs-1">4️⃣</div>
+                        <h5>Покупайте выгодно</h5>
+                        <p>Экономьте деньги на покупках</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+{% extends 'products/base.html' %}
+
+{% block content%}
+
+<nav class="navbar navbar-light bg-light mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">📈 Price Tracker</a>
+        <div class="navbar-nav ms-auto">
+            <a href="{% url 'product_list' %}" class="btn btn-outline-secondary btn-sm">← Назад к списку</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="card-title">{{ product.name }}</h1>
+            <p class="card-text">
+                <strong>Магазин:</strong> {{ product.store.name }}<br>
+                <strong>Ссылка:</strong> 
+                <a href="{{ product.url }}" target="_blank">{{ product.url|truncatechars:50 }}</a>
+            </p>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Текущая цена</h5>
+                            <h2 class="text-primary">
+                                {% if product.current_price %}
+                                    {{ product.current_price }} ₽
+                                {% else %}
+                                    <span class="text-muted">Не известно</span>
+                                {% endif %}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Целевая цена</h5>
+                            <h3 class="{% if product.target_price %}text-success{% else %}text-muted{% endif %}">
+                                {% if product.target_price %}
+                                    {{ product.target_price }} ₽
+                                {% else %}
+                                    Не задана
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Добавлен</h5>
+                            <h4 class="text-info">
+                                {{ product.created_at|date:"d.m.Y" }}
+                            </h4>
+                            <small class="text-muted">{{ product.created_at|timesince }} назад</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ ЦЕН -->
+    <div class="card">
+        <div class="card-header">
+            <h3>📊 История изменения цен</h3>
+        </div>
+        <div class="card-body">
+            {% if history %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Дата и время</th>
+                            <th>Цена</th>
+                            <th>Разница</th>
+                            <th>Время назад</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in history %}
+                        <tr>
+                            <td>{{ record.created_at|date:"d.m.Y H:i" }}</td>
+                            <td><strong>{{ record.price }} ₽</strong></td>
+                            <td>
+                                {% if forloop.first %}
+                                    <span class="badge bg-secondary">Текущая</span>
+                                {% else %}
+                                    {% with prev=history|slice:forloop.counter0|first %}
+                                        {% if prev %}
+                                            {% with diff=record.price|subtract:prev.price %}
+                                                {% if diff > 0 %}
+                                                    <span class="badge bg-danger">+{{ diff }} ₽</span>
+                                                {% elif diff < 0 %}
+                                                    <span class="badge bg-success">{{ diff }} ₽</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">0 ₽</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                            </td>
+                            <td><small class="text-muted">{{ record.created_at|timesince }} назад</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <p class="text-muted">
+                    <small>Показано последних {{ history|length }} записей из {{ product.price_history.count }}</small>
+                </p>
+            {% else %}
+                <div class="alert alert-info">
+                    📭 История цен пока пуста. Запустите парсинг командой:
+                    <code>python manage.py parse_prices</code>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endvblock %}
