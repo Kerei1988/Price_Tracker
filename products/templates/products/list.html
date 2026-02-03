@@ -41,6 +41,7 @@
                     </td>
                     <td>
                         <a href="{% url 'history' product.id %}" class="btn btn-sm btn-info">История</a>
+                        <a href="{% url 'parse_product' product.id %}" class="btn btn-sm btn-primary">🔍 Парсить сейчас</a>
                     </td>
                 </tr>
                 {% endfor %}
